@@ -21,7 +21,7 @@ public class HealthCheckProcessor implements Processor {
 
         String healthCheckResult = (String) exchange.getIn().getBody(String.class);
 
-        log.info("Health String of the APP is" + healthCheckResult);
+        System.out.println("Health String of the APP is" + healthCheckResult);
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, Object> map = objectMapper.readValue(healthCheckResult, new TypeReference<Map<String,Object>>(){});
         StringBuilder builder = null;
@@ -38,7 +38,7 @@ public class HealthCheckProcessor implements Processor {
         }
 
         if(builder!=null){
-            log.info("Exception Message is" + builder.toString());
+            System.out.println("Exception Message is" + builder.toString());
             exchange.getIn().setHeader("error", true);
             exchange.getIn().setBody(builder.toString());
             exchange.setProperty(Exchange.EXCEPTION_CAUGHT,builder.toString());
