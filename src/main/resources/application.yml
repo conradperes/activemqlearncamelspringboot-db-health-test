@@ -1,3 +1,5 @@
+server:
+  port: 8081
 spring:
   profiles:
     active: dev
@@ -23,21 +25,22 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: xyz@gmail.com
-    password:
+    username: integrationmachinelearning@gmail.com
+    password: qqksjgbnxutqouzj
     properties.mail.smtp.auth:  true
     properties.mail.smtp.starttls.enable: true
 
 mail.smtp.starttls.enable: true
 
-mailto: xyz@gmail.com
-mailFrom: xyz@gmail.com
+mailto: integrationmachinelearning@gmail.com
+mailFrom: integrationmachinelearning@gmail.com
 
 message:   Hello from MOCK Profile
 fromRoute: direct:input
 toRoute: mock:output
+errorQueue: activemq:errorItemQueue
 healthRoute: direct:health
-
+selectNode: sql:select * from ITEMS where sku =:#skuId?dataSource=#dataSource
 ---
 
 spring:
@@ -46,22 +49,29 @@ spring:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/localDB
     username: postgres
-    password: postgres
+    password: password
   mail:
     host: smtp.gmail.com
     port: 587
-    username: xyz@gmail.com
-    password:
+    username: integrationmachinelearning@gmail.com
+    password: qqksjgbnxutqouzj
     properties.mail.smtp.auth:  true
     properties.mail.smtp.starttls.enable: true
 
-mailto: xyz@gmail.com
-mailFrom: xyz@gmail.com
-message:   Hello from DEV Profile
-fromRoute: timer:health?period=10s
-toRoute:  log:?level=INFO&showBody=true
-healthRoute: timer:health?period=10s
 
+  activemq:
+    brokerUrl: tcp://localhost:61616
+    user: admin
+    password: admin
+
+mailto: integrationmachinelearning@gmail.com
+mailFrom: integrationmachinelearning@gmail.com
+message:   Hello from DEV Profile
+fromRoute: activemq:inputItemQueue
+toRoute:  jdbc:dataSource
+errorQueue: activemq:errorItemQueue
+healthRoute: timer:health?period=10s
+selectNode: sql:select * from ITEMS where sku =:#skuId?dataSource=#dataSource
 ---
 
 spring:
@@ -70,22 +80,29 @@ spring:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/localDB
     username: postgres
-    password: postgres
+    password: password
   mail:
     host: smtp.gmail.com
     port: 587
-    username: xyz@gmail.com
-    password:
+    username: integrationmachinelearning@gmail.com
+    password: qqksjgbnxutqouzj
     properties.mail.smtp.auth:  true
     properties.mail.smtp.starttls.enable: true
 
-mailto: xyz@gmail.com
-mailFrom: xyz@gmail.com
-message:    Hello from STAGE Profile
 
-fromRoute: timer:health?period=10s
-toRoute:  log:?level=INFO&showBody=true
+  activemq:
+    brokerUrl: tcp://localhost:61616
+    user: admin
+    password: admin
+
+mailto: integrationmachinelearning@gmail.com
+mailFrom: integrationmachinelearning@gmail.com
+message:   Hello from DEV Profile
+fromRoute: activemq:inputItemQueue
+toRoute:  jdbc:dataSource
+errorQueue: activemq:errorItemQueue
 healthRoute: timer:health?period=10s
+selectNode: sql:select * from ITEMS where sku =:#skuId?dataSource=#dataSource
 
 
 ---
@@ -96,23 +113,28 @@ spring:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/localDB
     username: postgres
-    password: postgres
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: xyz@gmail.com
-    password:
-    properties.mail.smtp.auth:  true
-    properties.mail.smtp.starttls.enable: true
+    password: password
+    mail:
+      host: smtp.gmail.com
+      port: 587
+      username: integrationmachinelearning@gmail.com
+      password: qqksjgbnxutqouzj
+      properties.mail.smtp.auth:  true
+      properties.mail.smtp.starttls.enable: true
 
-mailto: xyz@gmail.com
-mailFrom: xyz@gmail.com
 
-message:    Hello from PROD Profile
+    activemq:
+      brokerUrl: tcp://localhost:61616
+      user: admin
+      password: admin
 
-fromRoute: timer:health?period=10s
-toRoute:  log:?level=INFO&showBody=true
-healthRoute: timer:health?period=10s
-
+  mailto: integrationmachinelearning@gmail.com
+  mailFrom: integrationmachinelearning@gmail.com
+  message:   Hello from DEV Profile
+  fromRoute: activemq:inputItemQueue
+  toRoute:  jdbc:dataSource
+  errorQueue: activemq:errorItemQueue
+  healthRoute: timer:health?period=10s
+  selectNode: sql:select * from ITEMS where sku =:#skuId?dataSource=#dataSource
 
 ---

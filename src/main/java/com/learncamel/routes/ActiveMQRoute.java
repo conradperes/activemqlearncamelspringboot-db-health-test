@@ -1,9 +1,13 @@
 package com.learncamel.routes;
 
 import com.learncamel.alert.MailProcessor;
+import com.learncamel.domain.Item;
 import com.learncamel.exception.DataException;
+import com.learncamel.processor.BuildSQLProcessor;
+import com.learncamel.processor.ValidateDataProcessor;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.gson.GsonDataFormat;
 import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -16,7 +20,7 @@ import javax.sql.DataSource;
  * Created by z001qgd on 1/3/18.
  */
 @Component
-public class SimpleCamelRoute extends RouteBuilder{
+public class ActiveMQRoute extends RouteBuilder{
 
     @Autowired
     Environment environment;
@@ -28,20 +32,33 @@ public class SimpleCamelRoute extends RouteBuilder{
     @Autowired
     MailProcessor mailProcessor;
 
+    @Autowired
+    ValidateDataProcessor validateDataProcessor;
+
+    @Autowired
+    BuildSQLProcessor buildSQLProcessor;
 
     @Override
     public void configure() throws Exception {
+
+        GsonDataFormat itemFormat = new GsonDataFormat(Item.class);
 
         onException(PSQLException.class).log(LoggingLevel.ERROR,"PSQLException in the route ${body}")
                 .maximumRedeliveries(3).redeliveryDelay(3000).backOffMultiplier(2).retryAttemptedLogLevel(LoggingLevel.ERROR);
 
         onException(DataException.class,RuntimeException.class).log(LoggingLevel.ERROR, "DataException in the route ${body}")
-                .process(mailProcessor);
+                .process(mailProcessor)
+                .to("{{errorQueue}}");
 
 
         from("{{fromRoute}}")
-                    .log("Current Environment is "+ environment.getProperty("message"))
-                .to("{{toRoute}}");
+                    .log("Read Message from activemQ ${body}")
+                .unmarshal(itemFormat)
+                .log("Unmarshaled message is : ${body}")
+                .process(validateDataProcessor)
+                .process(buildSQLProcessor)
+                .to("{{toRoute}}")
+                .to("{{selectNode}}");
 
         }
 }

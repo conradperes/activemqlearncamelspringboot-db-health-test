@@ -2,16 +2,11 @@ package com.learncamel.routes;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.ConsumerTemplate;
-import org.apache.camel.Exchange;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.apache.camel.test.spring.CamelSpringBootRunner;
-import org.apache.camel.test.spring.DisableJmx;
-import org.apache.commons.io.FileUtils;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +15,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -36,7 +28,7 @@ import static org.junit.Assert.assertTrue;
 @RunWith(CamelSpringBootRunner.class)
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class SimpleCamelRouteTest extends CamelTestSupport {
+public class ActiveMQCamelRouteTest extends CamelTestSupport {
 
     @Autowired
     private CamelContext context;
@@ -54,7 +46,7 @@ public class SimpleCamelRouteTest extends CamelTestSupport {
 
     @Override
     protected RouteBuilder createRouteBuilder(){
-        return new SimpleCamelRoute();
+        return new ActiveMQRoute();
     }
 
     @Autowired
@@ -66,8 +58,12 @@ public class SimpleCamelRouteTest extends CamelTestSupport {
     }
 
    @Test
-    public void simpleTestCase(){
-       assertTrue(true);
+    public void activeMQRoute(){
+
+       String input= "{\"transactionType\":\"ADD\", \"sku\":\"100\", \"itemDescription\":\"SamsungTV\", \"price\":\"500.00\"}";
+       ArrayList response = (ArrayList)producerTemplate.requestBody("activemq:inputItemQueue", input);
+       System.out.println("The response is "+response);
+       assertNotNull(response);
    }
 
 }
