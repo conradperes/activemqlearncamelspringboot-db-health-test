@@ -26,7 +26,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: integrationmachinelearning@gmail.com
-    password: qqksjgbnxutqouzj
+    password:
     properties.mail.smtp.auth:  true
     properties.mail.smtp.starttls.enable: true
 
@@ -54,7 +54,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: integrationmachinelearning@gmail.com
-    password: qqksjgbnxutqouzj
+    password:
     properties.mail.smtp.auth:  true
     properties.mail.smtp.starttls.enable: true
 
@@ -63,6 +63,8 @@ spring:
     brokerUrl: tcp://localhost:61616
     user: admin
     password: admin
+    packages:
+      trust-all: true
 
 mailto: integrationmachinelearning@gmail.com
 mailFrom: integrationmachinelearning@gmail.com
@@ -85,7 +87,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: integrationmachinelearning@gmail.com
-    password: qqksjgbnxutqouzj
+    password:
     properties.mail.smtp.auth:  true
     properties.mail.smtp.starttls.enable: true
 
@@ -94,6 +96,8 @@ spring:
     brokerUrl: tcp://localhost:61616
     user: admin
     password: admin
+    packages:
+      trust-all: true
 
 mailto: integrationmachinelearning@gmail.com
 mailFrom: integrationmachinelearning@gmail.com
@@ -118,7 +122,7 @@ spring:
       host: smtp.gmail.com
       port: 587
       username: integrationmachinelearning@gmail.com
-      password: qqksjgbnxutqouzj
+      password:
       properties.mail.smtp.auth:  true
       properties.mail.smtp.starttls.enable: true
 
@@ -127,6 +131,8 @@ spring:
       brokerUrl: tcp://localhost:61616
       user: admin
       password: admin
+      packages:
+        trust-all: true
 
   mailto: integrationmachinelearning@gmail.com
   mailFrom: integrationmachinelearning@gmail.com

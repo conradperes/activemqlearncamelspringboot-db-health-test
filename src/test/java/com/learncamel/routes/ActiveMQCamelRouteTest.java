@@ -1,6 +1,7 @@
 package com.learncamel.routes;
 
 import org.apache.camel.CamelContext;
+import org.apache.camel.CamelExecutionException;
 import org.apache.camel.ConsumerTemplate;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
@@ -61,9 +62,21 @@ public class ActiveMQCamelRouteTest extends CamelTestSupport {
     public void activeMQRoute(){
 
        String input= "{\"transactionType\":\"ADD\", \"sku\":\"100\", \"itemDescription\":\"SamsungTV\", \"price\":\"500.00\"}";
-       ArrayList response = (ArrayList)producerTemplate.requestBody("activemq:inputItemQueue", input);
-       System.out.println("The response is "+response);
+       ArrayList response = (ArrayList) producerTemplate.requestBody("activemq:inputItemQueue", input);
+
+       System.out.println("response is :" + response);
+
        assertNotNull(response);
    }
+
+    @Test(expected = CamelExecutionException.class)
+    public void activeMQRoute_exception(){
+
+        String input = "{\"transactionType\":\"ADD\", \"sku\":\"\", \"itemDescription\":\"SamsungTV\", \"price\":\"500.00\"}";
+
+        ArrayList response = (ArrayList) producerTemplate.requestBody("activemq:inputItemQueue", input);
+
+
+    }
 
 }
